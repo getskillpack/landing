@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>skillget — CLI for the getskillpack ecosystem</title>
+  <meta name="description" content="Install a vetted skill in one command, pin versions in your repo, and reproduce the same setup for your team and agents — without zip handoffs." />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="skillget — CLI for the getskillpack ecosystem" />
+  <meta property="og:description" content="Package manager for skills: search, install, lockfile. Official client for the getskillpack org." />
+  <meta property="og:url" content="https://getskillpack.github.io/landing/" />
+  <meta property="og:site_name" content="getskillpack" />
+  <meta property="og:image" content="https://getskillpack.github.io/landing/og-card.svg" />
+  <meta property="og:locale" content="en_US" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="skillget — CLI for the getskillpack ecosystem" />
+  <meta name="twitter:description" content="Package manager for skills: search, install, lockfile." />
+  <meta name="twitter:image" content="https://getskillpack.github.io/landing/og-card.svg" />
+
+  <link rel="canonical" href="https://getskillpack.github.io/landing/" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📦</text></svg>" />
+
+  <style>
+    :root {
+      --bg: #0c0d12;
+      --surface: #14161f;
+      --border: #252838;
+      --text: #e8e9ef;
+      --muted: #8b90a5;
+      --accent: #5eead4;
+      --accent-dim: #2dd4bf33;
+      --warn: #fbbf24;
+      --font: "Segoe UI", system-ui, -apple-system, sans-serif;
+      --mono: "JetBrains Mono", "Fira Code", "Consolas", monospace;
+      --radius: 12px;
+      --max: 920px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      font-size: 17px;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .wrap { max-width: var(--max); margin: 0 auto; padding: 0 1.25rem; }
+    header.hero {
+      padding: 4rem 0 3rem;
+      background: radial-gradient(ellipse 80% 60% at 50% -20%, var(--accent-dim), transparent);
+      border-bottom: 1px solid var(--border);
+    }
+    .badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--accent);
+      border: 1px solid var(--border);
+      padding: 0.35rem 0.65rem;
+      border-radius: 999px;
+      margin-bottom: 1rem;
+    }
+    h1 {
+      font-size: clamp(1.85rem, 4vw, 2.65rem);
+      font-weight: 700;
+      line-height: 1.15;
+      margin: 0 0 1rem;
+      letter-spacing: -0.02em;
+    }
+    .lead {
+      font-size: 1.15rem;
+      color: var(--muted);
+      max-width: 40rem;
+      margin: 0 0 1.75rem;
+    }
+    .north {
+      font-size: 0.95rem;
+      color: var(--muted);
+      max-width: 42rem;
+      margin: 0 0 1.5rem;
+      padding: 1rem 1.15rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      border-left: 3px solid var(--accent);
+    }
+    .north strong { color: var(--text); }
+    .cta-row { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.25rem;
+      border-radius: var(--radius);
+      font-weight: 600;
+      font-size: 0.95rem;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: transform 0.12s ease, background 0.12s ease;
+    }
+    .btn:hover { transform: translateY(-1px); text-decoration: none; }
+    .btn-primary {
+      background: var(--accent);
+      color: #042f2e;
+    }
+    .btn-primary:hover { background: #7ff5e4; color: #042f2e; }
+    .btn-ghost {
+      background: var(--surface);
+      border-color: var(--border);
+      color: var(--text);
+    }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+    .btn-star {
+      background: linear-gradient(145deg, #1e293b, #0f172a);
+      border-color: var(--border);
+      color: var(--warn);
+    }
+    .btn-star:hover { border-color: var(--warn); color: #fde68a; }
+    section { padding: 3.25rem 0; border-bottom: 1px solid var(--border); }
+    section:last-of-type { border-bottom: none; }
+    h2 {
+      font-size: 1.45rem;
+      margin: 0 0 1.25rem;
+      letter-spacing: -0.02em;
+    }
+    .flow {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      margin-top: 1.5rem;
+    }
+    .flow-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem 1.1rem;
+      text-align: center;
+    }
+    .flow-card strong { display: block; font-size: 0.95rem; margin-bottom: 0.35rem; }
+    .flow-card span { font-size: 0.8rem; color: var(--muted); }
+    .arrow { display: none; }
+    @media (min-width: 720px) {
+      .flow { grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr; align-items: center; }
+      .arrow { display: block; color: var(--muted); font-size: 1.25rem; }
+    }
+    pre, code { font-family: var(--mono); font-size: 0.85rem; }
+    pre {
+      background: #08090c;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.1rem 1.25rem;
+      overflow-x: auto;
+      margin: 0;
+      line-height: 1.5;
+    }
+    pre .c { color: #6b7280; }
+    pre .k { color: var(--accent); }
+    .grid-2 {
+      display: grid;
+      gap: 1.5rem;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 640px) {
+      .grid-2 { grid-template-columns: 1fr 1fr; }
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.35rem;
+    }
+    .card h3 { margin: 0 0 0.5rem; font-size: 1.05rem; }
+    .card p { margin: 0; color: var(--muted); font-size: 0.95rem; }
+    .metrics-table-wrap {
+      overflow-x: auto;
+      margin-top: 1rem;
+    }
+    table.metrics {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+    }
+    table.metrics th,
+    table.metrics td {
+      text-align: left;
+      padding: 0.65rem 0.85rem;
+      border: 1px solid var(--border);
+      vertical-align: top;
+    }
+    table.metrics th {
+      background: var(--surface);
+      color: var(--text);
+      font-weight: 600;
+    }
+    table.metrics td { color: var(--muted); }
+    table.metrics td:first-child { color: var(--text); font-weight: 500; }
+    footer {
+      padding: 2.5rem 0 3rem;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+    footer .links { display: flex; flex-wrap: wrap; gap: 1rem 1.5rem; margin-bottom: 1rem; }
+    .note {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="wrap">
+      <span class="badge">getskillpack · skillget</span>
+      <h1>A package manager for agent and IDE skills</h1>
+      <p class="lead">
+        Install a vetted skill in one command, pin versions in your repository, and reproduce the same setup for your team and agents — without zip bundles or ad-hoc runbooks.
+      </p>
+      <p class="north" id="north-star">
+        <strong>North star.</strong> We are building in the open so teams can trust, fork, and contribute.
+        Rough compass for the org: on the order of <strong>10k cumulative GitHub stars</strong> across our flagship public repositories over the next couple of years — a <em>directional</em> signal of adoption, not a quarterly target baked into the product roadmap.
+      </p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="#quick-start">Install the CLI</a>
+        <a class="btn btn-ghost" href="https://github.com/getskillpack/registry/blob/main/docs/registry-api.md" target="_blank" rel="noopener">Registry API docs</a>
+        <a class="btn btn-ghost" href="https://github.com/getskillpack/cli" target="_blank" rel="noopener">Source on GitHub</a>
+        <a class="btn btn-star" href="https://github.com/getskillpack/cli" target="_blank" rel="noopener" title="Opens the repository; use GitHub’s Star button there">Star the CLI repo</a>
+      </div>
+      <p class="note" style="margin-top:1.1rem;margin-bottom:0">
+        Flagship repos to watch: <a href="https://github.com/getskillpack/cli" target="_blank" rel="noopener">cli</a>,
+        <a href="https://github.com/getskillpack/registry" target="_blank" rel="noopener">registry</a>,
+        <a href="https://github.com/getskillpack/skillget-manager" target="_blank" rel="noopener">skillget-manager</a>
+        — starring helps discovery; we never use bots or reciprocal schemes (see playbook below).
+      </p>
+    </div>
+  </header>
+
+  <section id="how">
+    <div class="wrap">
+      <h2>How it works</h2>
+      <p class="note" style="margin-top:0">From the registry to a pinned install tree in your repo.</p>
+      <div class="flow" aria-label="Flow: registry, CLI, lockfile, install directory">
+        <div class="flow-card">
+          <strong>Registry</strong>
+          <span>HTTP API and skill metadata</span>
+        </div>
+        <span class="arrow" aria-hidden="true">→</span>
+        <div class="flow-card">
+          <strong>skillget (CLI)</strong>
+          <span>search, install, config</span>
+        </div>
+        <span class="arrow" aria-hidden="true">→</span>
+        <div class="flow-card">
+          <strong>skills.lock</strong>
+          <span>pinned versions</span>
+        </div>
+        <span class="arrow" aria-hidden="true">→</span>
+        <div class="flow-card">
+          <strong>.skillget/</strong>
+          <span>local install tree</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="quick-start">
+    <div class="wrap">
+      <h2>Quick start</h2>
+      <p class="note" style="margin-top:0">Goal: build the Go client and install a first skill in about five minutes. Default registry base: <code>https://registry.skpkg.org/api/v1</code> (override when needed).</p>
+      <pre><span class="c"># Build the Go client (recommended path)</span>
+<span class="k">git</span> clone https://github.com/getskillpack/cli.git && <span class="k">cd</span> cli
+<span class="k">go</span> build -o skillget ./cmd/skillget
+
+<span class="c"># Local or custom registry</span>
+<span class="k">export</span> SKILLGET_REGISTRY_URL=http://localhost:3000/api/v1
+
+<span class="k">./skillget</span> search
+<span class="k">./skillget</span> install &lt;skill-name&gt;</pre>
+      <p class="note">After <code>install</code>, the CLI updates <code>skills.lock</code> and writes artifacts under <code>.skillget/skills/&lt;name&gt;/&lt;version&gt;/</code>.</p>
+    </div>
+  </section>
+
+  <section id="metrics">
+    <div class="wrap">
+      <h2>Signals we track (funnel + trust)</h2>
+      <p class="note" style="margin-top:0">We review these on a <strong>weekly</strong> cadence for the org (dashboard or short doc for board) — not on every automation heartbeat. Traffic and clone charts come from <a href="https://github.com/getskillpack/cli/graphs/traffic" target="_blank" rel="noopener">GitHub Insights</a> per repository where enabled.</p>
+      <div class="metrics-table-wrap">
+        <table class="metrics" aria-label="Growth and funnel metrics">
+          <thead>
+            <tr>
+              <th scope="col">Signal</th>
+              <th scope="col">What it tells us</th>
+              <th scope="col">Primary source</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>GitHub stars</td>
+              <td>Discovery and trust in the open; rolls up toward the long-horizon org compass above.</td>
+              <td>Repo stargazer counts (e.g. <a href="https://github.com/getskillpack/cli" target="_blank" rel="noopener">cli</a>, <a href="https://github.com/getskillpack/registry" target="_blank" rel="noopener">registry</a>)</td>
+            </tr>
+            <tr>
+              <td>Clones &amp; visitors</td>
+              <td>Interest before someone stars or installs; highlights README and landing effectiveness.</td>
+              <td>GitHub → Insights → Traffic (per repo)</td>
+            </tr>
+            <tr>
+              <td>Referrers / site traffic</td>
+              <td>Which surfaces send people to the README, releases, or this landing (when Pages analytics are available).</td>
+              <td>GitHub Traffic + Pages (as configured)</td>
+            </tr>
+            <tr>
+              <td>Releases &amp; tags</td>
+              <td>Predictability for early adopters; pairs with changelog quality.</td>
+              <td>Releases tab per repository</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note">Full playbook, anti-spam rules, and handoff checklist: <a href="https://github.com/getskillpack/cli/blob/main/docs/MARKETING_LANDING_AND_GROWTH.md">MARKETING_LANDING_AND_GROWTH.md</a> (English) · <a href="https://github.com/getskillpack/cli/blob/main/docs/MARKETING_LANDING_AND_GROWTH_RU.md">Russian mirror</a> for internal notes.</p>
+    </div>
+  </section>
+
+  <section id="trust">
+    <div class="wrap">
+      <h2>Trust and transparency</h2>
+      <div class="grid-2">
+        <div class="card">
+          <h3>License and source</h3>
+          <p>CLI and related packages in the org ship as open source (see LICENSE in each repo). We do not publish a public SLA before GA — timelines and priorities show up in Issues and releases.</p>
+        </div>
+        <div class="card">
+          <h3>Roadmap</h3>
+          <p>Follow work and releases across the <a href="https://github.com/getskillpack" target="_blank" rel="noopener">getskillpack</a> organization: regular tags on <code>cli</code>, <code>registry</code>, and <code>skillget-manager</code> are the adoption signal for early users.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="authors">
+    <div class="wrap">
+      <h2>For skill authors</h2>
+      <p>Publishing contract and metadata formats live in the registry repository. Start from <a href="https://github.com/getskillpack/registry/blob/main/docs/registry-api.md" target="_blank" rel="noopener">registry-api.md</a> and the <a href="https://github.com/getskillpack/registry" target="_blank" rel="noopener">getskillpack/registry</a> sources.</p>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      <div class="links">
+        <a href="https://github.com/getskillpack">GitHub org</a>
+        <a href="https://github.com/getskillpack/cli">cli repository</a>
+        <a href="https://github.com/getskillpack/registry/blob/main/docs/registry-api.md">Registry API</a>
+        <a href="https://github.com/getskillpack/cli">Star · cli</a>
+        <a href="https://github.com/getskillpack/registry">Star · registry</a>
+        <a href="https://github.com/getskillpack/skillget-manager">Star · skillget-manager</a>
+      </div>
+      <p>Canonical copy and KPI cadence: <a href="https://github.com/getskillpack/cli/blob/main/docs/MARKETING_LANDING_AND_GROWTH.md">MARKETING_LANDING_AND_GROWTH.md</a>. Public docs host and analytics scope are agreed with board.</p>
+    </div>
+  </footer>
+</body>
+</html>
