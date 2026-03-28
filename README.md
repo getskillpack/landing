@@ -1,10 +1,12 @@
 # getskillpack landing (public)
 
-Static marketing site for **[getskillpack](https://github.com/getskillpack)** and the **skillget** CLI, deployed with GitHub Actions to **GitHub Pages**.
+Static marketing site for **[getskillpack](https://github.com/getskillpack)** and the **skillget** CLI.
 
-**Live site:** https://getskillpack.github.io/landing/
+**Published with GitHub Pages** from branch `main`, folder **`/docs`** (org setting). **Live URL:** https://getskillpack.github.io/landing/
 
-Source copy is kept in sync with [`getskillpack/cli`](https://github.com/getskillpack/cli) (`docs/landing/`). Prefer editing there and mirroring here, or open a PR against this repo for copy-only changes.
+Site files live in [`docs/`](docs/) (not the repo root), so they match the Pages source path board enabled.
+
+**Editing:** canonical copy is maintained in [`getskillpack/cli`](https://github.com/getskillpack/cli) under `docs/landing/`. Mirror changes into `docs/` here, or open a PR against this repo for copy-only updates.
 
 ## License
 
