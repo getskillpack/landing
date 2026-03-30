@@ -8,6 +8,8 @@ Site files live in [`docs/`](docs/) (not the repo root), so they match the Pages
 
 **Editing:** canonical copy is maintained in [`getskillpack/cli`](https://github.com/getskillpack/cli) under `docs/landing/`. Mirror changes into `docs/` here, or open a PR against this repo for copy-only updates.
 
+**Contributing:** [CONTRIBUTING.md](CONTRIBUTING.md) — local preview, PR workflow, links to sibling repos and the compatibility matrix.
+
 ## Repositories & documentation
 
 | Component | GitHub |
